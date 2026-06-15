@@ -34,10 +34,14 @@ class _WebViewScreenState extends State<WebViewScreen> {
             _hasError = false;
           }),
           onPageFinished: (_) => setState(() => _loading = false),
-          onWebResourceError: (_) => setState(() {
-            _hasError = true;
-            _loading = false;
-          }),
+          onWebResourceError: (error) {
+            if (error.isForMainFrame ?? true) {
+              setState(() {
+                _hasError = true;
+                _loading = false;
+              });
+            }
+          },
         ),
       )
       ..loadRequest(Uri.parse(_url));
