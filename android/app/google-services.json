@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "809627808645",
+    "project_id": "soocher-doctor",
+    "storage_bucket": "soocher-doctor.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:809627808645:android:989008e64e45bb8165caec",
+        "android_client_info": {
+          "package_name": "com.soocherdoctor"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbJnJUoqs4C5Uc31Humw7B6PC13Rk6214"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
