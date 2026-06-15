@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
 class WebViewScreen extends StatefulWidget {
   const WebViewScreen({super.key});
 
@@ -11,6 +10,11 @@ class WebViewScreen extends StatefulWidget {
 
 class _WebViewScreenState extends State<WebViewScreen> {
   static const _url = 'https://soocher-doctor.vercel.app/login';
+
+  // Mimic Chrome on Android so the site behaves as on a real device
+  static const _userAgent =
+      'Mozilla/5.0 (Linux; Android 16; Mobile) AppleWebKit/537.36 '
+      '(KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36';
 
   late final WebViewController _wvc;
   int _progress = 0;
@@ -23,8 +27,20 @@ class _WebViewScreenState extends State<WebViewScreen> {
     _wvc = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0xFFF8FAFC))
+      ..setUserAgent(_userAgent)
       ..setNavigationDelegate(
         NavigationDelegate(
+          // Block intent://, mailto:, tel: and any non-HTTP(S) scheme.
+          // These cause the "Webpage not available" error page when the
+          // WebView tries to handle them as page navigations.
+          onNavigationRequest: (request) {
+            final uri = Uri.tryParse(request.url);
+            if (uri != null &&
+                (uri.scheme == 'https' || uri.scheme == 'http')) {
+              return NavigationDecision.navigate;
+            }
+            return NavigationDecision.prevent;
+          },
           onProgress: (p) => setState(() {
             _progress = p;
             _loading = p < 100;
