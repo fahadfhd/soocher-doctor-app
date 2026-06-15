@@ -34,11 +34,15 @@ class _WebViewScreenState extends State<WebViewScreen> {
           // These cause the "Webpage not available" error page when the
           // WebView tries to handle them as page navigations.
           onNavigationRequest: (request) {
-            final uri = Uri.tryParse(request.url);
-            if (uri != null &&
-                (uri.scheme == 'https' || uri.scheme == 'http')) {
+            final url = request.url;
+            // Allow standard web URLs and blank pages (used internally by Firebase)
+            if (url.startsWith('https://') ||
+                url.startsWith('http://') ||
+                url.startsWith('about:')) {
               return NavigationDecision.navigate;
             }
+            // Block intent://, tel:, mailto: etc. — these crash the WebView
+            // with "Webpage not available" since it can't handle them as pages
             return NavigationDecision.prevent;
           },
           onProgress: (p) => setState(() {
