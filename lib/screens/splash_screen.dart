@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'login_screen.dart';
 import 'web_view_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -68,9 +70,11 @@ class _SplashScreenState extends State<SplashScreen>
 
   void _navigateToWebView() {
     if (!mounted) return;
+    final user = FirebaseAuth.instance.currentUser;
+    final next = user != null ? const WebViewScreen() : const LoginScreen();
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
-        pageBuilder: (_, __, ___) => const WebViewScreen(),
+        pageBuilder: (_, __, ___) => next,
         transitionDuration: const Duration(milliseconds: 500),
         transitionsBuilder: (_, anim, __, child) =>
             FadeTransition(opacity: anim, child: child),

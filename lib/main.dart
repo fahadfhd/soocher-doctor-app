@@ -6,16 +6,18 @@ import 'screens/splash_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
-    await Firebase.initializeApp();
+    await Firebase.initializeApp()
+        .timeout(const Duration(seconds: 5),
+            onTimeout: () => throw Exception('Firebase init timeout'));
   } catch (_) {
     // Firebase init failure must not block the app — the WebView handles auth
   }
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
-      statusBarColor: Color(0xFF2E6DD4),
-      statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: Color(0xFF2E6DD4),
-      systemNavigationBarIconBrightness: Brightness.light,
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarColor: Colors.white,
+      systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
   runApp(const SoocherDoctorApp());

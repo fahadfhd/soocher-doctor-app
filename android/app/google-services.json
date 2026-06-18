@@ -1,26 +1,208 @@
 {
   "project_info": {
-    "project_number": "809627808645",
-    "project_id": "soocher-doctor",
-    "storage_bucket": "soocher-doctor.firebasestorage.app"
+    "project_number": "145319049244",
+    "firebase_url": "https://soocherv2-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "soocherv2",
+    "storage_bucket": "soocherv2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:809627808645:android:989008e64e45bb8165caec",
+        "mobilesdk_app_id": "1:145319049244:android:af6407501d593615f107d9",
         "android_client_info": {
-          "package_name": "com.soocherdoctor"
+          "package_name": "com.soocher"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "145319049244-2i59f19bug1u8lsjtd8r5d9o7lb6hm5v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.soocher",
+            "certificate_hash": "0bc48086afe7db56f6e7abdde59829d4568e4e10"
+          }
+        },
+        {
+          "client_id": "145319049244-gt3lbrh887tfshbl18q6sdfr4d9aa88d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.soocher",
+            "certificate_hash": "f3584f0cc6a2b0040ea974972f52b6291ef3a353"
+          }
+        },
+        {
+          "client_id": "145319049244-hej60f456uarnjsjhrp8tqafglsibp4g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.soocher",
+            "certificate_hash": "248e58cd0f4e67f04e7f0d7a2a3b3623f89c0af2"
+          }
+        },
+        {
+          "client_id": "145319049244-jidqf185ifgrakjh53unqop878v8sjp2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.soocher",
+            "certificate_hash": "70ae6cc34ca870e26cd40e0429eae01be25132d3"
+          }
+        },
+        {
+          "client_id": "145319049244-k5vjajcg23i8p8iv1qe9b9nt7ukg9sok.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.soocher",
+            "certificate_hash": "cfc99c7380626e1d8abad78b37890dc87b513813"
+          }
+        },
+        {
+          "client_id": "145319049244-s42382domhv0k5klm2no2o3h2a6g4hl7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.soocher",
+            "certificate_hash": "54f03d1c7b2ef5493b73291647275078213a1e7f"
+          }
+        },
+        {
+          "client_id": "145319049244-uuoa22asd5sp46c47nhr6trlvvd7dk1q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.soocher",
+            "certificate_hash": "cbe4a30264c757fdad6fadc225d63e77f4b36c48"
+          }
+        },
+        {
+          "client_id": "145319049244-u18n23qtm3buoeturlak9pd8c0iqur62.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyAbJnJUoqs4C5Uc31Humw7B6PC13Rk6214"
+          "current_key": "AIzaSyDNddWXuZu3B_2wFoPr2H75STcRZk4vTYs"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "145319049244-u18n23qtm3buoeturlak9pd8c0iqur62.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "145319049244-2l28baujldnl94ncha9krb2io3bqmoo4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.soocher.soocher"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:145319049244:android:eecde85484f38c54f107d9",
+        "android_client_info": {
+          "package_name": "com.soocher.doctor.droid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "145319049244-u18n23qtm3buoeturlak9pd8c0iqur62.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNddWXuZu3B_2wFoPr2H75STcRZk4vTYs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "145319049244-u18n23qtm3buoeturlak9pd8c0iqur62.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "145319049244-2l28baujldnl94ncha9krb2io3bqmoo4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.soocher.soocher"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:145319049244:android:4676d9b57ba14d10f107d9",
+        "android_client_info": {
+          "package_name": "com.soocher.soocher_backend_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "145319049244-u18n23qtm3buoeturlak9pd8c0iqur62.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNddWXuZu3B_2wFoPr2H75STcRZk4vTYs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "145319049244-u18n23qtm3buoeturlak9pd8c0iqur62.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "145319049244-2l28baujldnl94ncha9krb2io3bqmoo4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.soocher.soocher"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:145319049244:android:895d060869ed2338f107d9",
+        "android_client_info": {
+          "package_name": "in.soocher.soocher_backend_v2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "145319049244-u18n23qtm3buoeturlak9pd8c0iqur62.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNddWXuZu3B_2wFoPr2H75STcRZk4vTYs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "145319049244-u18n23qtm3buoeturlak9pd8c0iqur62.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "145319049244-2l28baujldnl94ncha9krb2io3bqmoo4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.soocher.soocher"
+              }
+            }
+          ]
         }
       }
     }
