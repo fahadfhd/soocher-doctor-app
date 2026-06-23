@@ -107,6 +107,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "145319049244-k6tpfhomue57l15hhkav1ji8fnfu1vrh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.soocher.doctor.droid",
+            "certificate_hash": "f1ace9b8afd43b64af1e1c3927a310619ddebe0c"
+          }
+        },
+        {
           "client_id": "145319049244-u18n23qtm3buoeturlak9pd8c0iqur62.apps.googleusercontent.com",
           "client_type": 3
         }

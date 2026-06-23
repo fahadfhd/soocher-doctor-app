@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>145319049244-kuvvo4ke78ta3t4oqe0jh5nugu4pobu4.apps.googleusercontent.com</string>
+	<string>145319049244-ped8tj7c5ef93kgcc06fcec5q4lsdsvs.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.145319049244-kuvvo4ke78ta3t4oqe0jh5nugu4pobu4</string>
+	<string>com.googleusercontent.apps.145319049244-ped8tj7c5ef93kgcc06fcec5q4lsdsvs</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>145319049244-2i59f19bug1u8lsjtd8r5d9o7lb6hm5v.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.soocher.doctor.ios</string>
+	<string>com.soocher.doctor.doctor</string>
 	<key>PROJECT_ID</key>
 	<string>soocherv2</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,7 +31,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:145319049244:ios:f4d76168c09b07b6f107d9</string>
+	<string>1:145319049244:ios:46920ba73ba7112cf107d9</string>
 	<key>DATABASE_URL</key>
 	<string>https://soocherv2-default-rtdb.asia-southeast1.firebasedatabase.app</string>
 </dict>

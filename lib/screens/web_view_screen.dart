@@ -28,11 +28,10 @@ class _WebViewScreenState extends State<WebViewScreen> {
 
   late final WebViewController _wvc;
   int  _progress      = 0;
-  bool _loading       = true;
-  bool _hasError      = false;
-  bool _joiningCall   = false;
-  bool _signingIn     = false;
-  bool _initialLoaded = false;
+  bool _loading     = true;
+  bool _hasError    = false;
+  bool _joiningCall = false;
+  bool _signingIn   = false;
 
   @override
   void initState() {
@@ -80,11 +79,6 @@ class _WebViewScreenState extends State<WebViewScreen> {
             _handleLoginDetected();
             return;
           }
-          // Keep overlay on /native-auth (it's a brief auth redirect, not real content)
-          final path = Uri.tryParse(url)?.path ?? '';
-          if (!_initialLoaded && path != '/native-auth') {
-            setState(() => _initialLoaded = true);
-          }
           _injectRouteHook();
           _injectOverscrollFix();
         },
@@ -103,11 +97,6 @@ class _WebViewScreenState extends State<WebViewScreen> {
 
     // Kick off the first auth load
     _loadWithCustomToken();
-
-    // Fallback: reveal content after 10s so the overlay never gets stuck
-    Future.delayed(const Duration(seconds: 10), () {
-      if (mounted && !_initialLoaded) setState(() => _initialLoaded = true);
-    });
   }
 
   // ── Custom-token auth flow ────────────────────────────────────────────────
@@ -130,14 +119,14 @@ class _WebViewScreenState extends State<WebViewScreen> {
     }
 
     try {
-      final idToken = await user.getIdToken(true);
+      final idToken = await user.getIdToken();
       final res = await http.post(
         Uri.parse(_tokenApi),
         headers: {
           'Authorization': 'Bearer $idToken',
           'Content-Type': 'application/json',
         },
-      ).timeout(const Duration(seconds: 15));
+      ).timeout(const Duration(seconds: 8));
 
       if (res.statusCode == 200) {
         final body = jsonDecode(res.body) as Map<String, dynamic>;
@@ -386,7 +375,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
   }
 
   void _reload() {
-    setState(() { _hasError = false; _loading = true; _signingIn = false; _initialLoaded = false; });
+    setState(() { _hasError = false; _loading = true; _signingIn = false; });
     _loadWithCustomToken();
   }
 
@@ -409,7 +398,6 @@ class _WebViewScreenState extends State<WebViewScreen> {
             fit: StackFit.expand,
             children: [
               _hasError ? _errorView() : WebViewWidget(controller: _wvc),
-              if (!_initialLoaded && !_hasError) _loadingOverlay(),
               if (_joiningCall)
                 const ColoredBox(
                   color: Color(0x88000000),
@@ -418,54 +406,6 @@ class _WebViewScreenState extends State<WebViewScreen> {
                 ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _loadingOverlay() {
-    return Container(
-      color: const Color(0xFFF8FAFC),
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 76,
-              height: 76,
-              decoration: BoxDecoration(
-                color: const Color(0xFF2E6DD4),
-                borderRadius: BorderRadius.circular(22),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF2E6DD4).withValues(alpha: 0.35),
-                    blurRadius: 28,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
-              ),
-              child: const Icon(Icons.medical_services_rounded,
-                  color: Colors.white, size: 36),
-            ),
-            const SizedBox(height: 24),
-            const Text('Soocher',
-                style: TextStyle(fontSize: 26, fontWeight: FontWeight.w900,
-                    color: Color(0xFF0F172A), letterSpacing: -0.3)),
-            const SizedBox(height: 4),
-            const Text('FOR DOCTORS',
-                style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700,
-                    color: Color(0xFF2E6DD4), letterSpacing: 3)),
-            const SizedBox(height: 48),
-            const SizedBox(
-              width: 28,
-              height: 28,
-              child: CircularProgressIndicator(
-                  color: Color(0xFF2E6DD4), strokeWidth: 2.5),
-            ),
-            const SizedBox(height: 16),
-            const Text('Setting up your workspace…',
-                style: TextStyle(fontSize: 14, color: Color(0xFF64748B))),
-          ],
         ),
       ),
     );
