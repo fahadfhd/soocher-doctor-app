@@ -13,6 +13,7 @@ dependencies:
   firebase_core: ^3.13.1
   firebase_auth: ^5.5.4
   cloud_firestore: ^5.6.8
+  firebase_messaging: ^15.2.5
   stream_video_flutter: ^0.8.0
   permission_handler: ^11.3.1
   http: ^1.2.0
