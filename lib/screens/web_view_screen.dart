@@ -189,7 +189,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
       await FirebaseFirestore.instance
           .collection('Users')
           .doc(uid)
-          .update({'fcmToken': token});
+          .set({'fcmToken': token}, SetOptions(merge: true));
       debugPrint('[FCM] token registered');
 
       FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
@@ -198,7 +198,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
         await FirebaseFirestore.instance
             .collection('Users')
             .doc(currentUid)
-            .update({'fcmToken': newToken});
+            .set({'fcmToken': newToken}, SetOptions(merge: true));
         debugPrint('[FCM] token refreshed');
       });
     } catch (e) {

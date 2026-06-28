@@ -107,11 +107,35 @@
       },
       "oauth_client": [
         {
+          "client_id": "145319049244-asvnce4ct080q17pn4jqifhtt8gdm2e4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.soocher.doctor.droid",
+            "certificate_hash": "48e7492ffb614117a20ce94da0cca1b384fe0e89"
+          }
+        },
+        {
+          "client_id": "145319049244-e8i7ig2l2iub9oo6dj550k4c5dsam2do.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.soocher.doctor.droid",
+            "certificate_hash": "dcaa77b11d3ac29ea481f5d651eb464d50336598"
+          }
+        },
+        {
           "client_id": "145319049244-k6tpfhomue57l15hhkav1ji8fnfu1vrh.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.soocher.doctor.droid",
             "certificate_hash": "f1ace9b8afd43b64af1e1c3927a310619ddebe0c"
+          }
+        },
+        {
+          "client_id": "145319049244-p2mc9mj7ud6ljg64uq4ibtc2ra4dcu26.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.soocher.doctor.droid",
+            "certificate_hash": "f96451330f0a927f7edf35f95bf8a2bd6c3318d5"
           }
         },
         {

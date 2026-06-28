@@ -50,31 +50,33 @@ class _LoginScreenState extends State<LoginScreen>
 
   _Country _selectedCountry = _countries.first;
 
-  final _phoneCtrl     = TextEditingController();
-  final _emailCtrl     = TextEditingController();
-  final _passwordCtrl  = TextEditingController();
+  final _phoneCtrl = TextEditingController();
+  final _emailCtrl = TextEditingController();
+  final _passwordCtrl = TextEditingController();
 
-  final _phoneFocus    = FocusNode();
-  final _emailFocus    = FocusNode();
+  final _phoneFocus = FocusNode();
+  final _emailFocus = FocusNode();
   final _passwordFocus = FocusNode();
 
   // OTP is managed inside _OtpStep; we only track the current code here
   String _otpCode = '';
 
-  bool    _loading         = false;
+  bool _loading = false;
   String? _error;
-  bool    _passwordVisible = false;
+  bool _passwordVisible = false;
 
   String? _pendingVerificationId;
 
   late final AnimationController _fadeCtrl;
-  late final Animation<double>   _fade;
+  late final Animation<double> _fade;
 
   @override
   void initState() {
     super.initState();
     _fadeCtrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 400));
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
     _fade = CurvedAnimation(parent: _fadeCtrl, curve: Curves.easeOut);
     _fadeCtrl.forward();
   }
@@ -92,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   void _setError(String? e) => setState(() => _error = e);
-  void _setLoading(bool v)  => setState(() => _loading = v);
+  void _setLoading(bool v) => setState(() => _loading = v);
 
   // ── Country picker ────────────────────────────────────────────────────────
 
@@ -108,41 +110,56 @@ class _LoginScreenState extends State<LoginScreen>
         children: [
           const SizedBox(height: 12),
           Container(
-            width: 40, height: 4,
+            width: 40,
+            height: 4,
             decoration: BoxDecoration(
               color: const Color(0xFFCBD5E1),
               borderRadius: BorderRadius.circular(2),
             ),
           ),
           const SizedBox(height: 16),
-          const Text('Select Country',
-              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800,
-                  color: Color(0xFF0F172A))),
+          const Text(
+            'Select Country',
+            style: TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.w800,
+              color: Color(0xFF0F172A),
+            ),
+          ),
           const SizedBox(height: 8),
           Flexible(
             child: ListView.builder(
               shrinkWrap: true,
               itemCount: _countries.length,
               itemBuilder: (_, i) {
-                final c        = _countries[i];
-                final selected = c.dialCode == _selectedCountry.dialCode &&
+                final c = _countries[i];
+                final selected =
+                    c.dialCode == _selectedCountry.dialCode &&
                     c.name == _selectedCountry.name;
                 return ListTile(
-                  leading: Text(c.flag,
-                      style: const TextStyle(fontSize: 24)),
-                  title: Text(c.name,
-                      style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.w600)),
-                  trailing: Text(c.dialCode,
-                      style: TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.w700,
-                          color: selected
-                              ? const Color(0xFF2E6DD4)
-                              : const Color(0xFF64748B))),
+                  leading: Text(c.flag, style: const TextStyle(fontSize: 24)),
+                  title: Text(
+                    c.name,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  trailing: Text(
+                    c.dialCode,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: selected
+                          ? const Color(0xFF2E6DD4)
+                          : const Color(0xFF64748B),
+                    ),
+                  ),
                   selected: selected,
                   selectedTileColor: const Color(0xFFEDF4FF),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                   onTap: () {
                     setState(() => _selectedCountry = c);
                     Navigator.pop(context);
@@ -161,11 +178,15 @@ class _LoginScreenState extends State<LoginScreen>
 
   Future<void> _sendOtp() async {
     final number = _phoneCtrl.text.trim();
-    if (number.isEmpty) { _setError('Enter your phone number'); return; }
+    if (number.isEmpty) {
+      _setError('Enter your phone number');
+      return;
+    }
     _setError(null);
     _setLoading(true);
     final fullPhone = '${_selectedCountry.dialCode}$number';
     try {
+      // await FirebaseAuth.instance.setSettings(forceRecaptchaFlow: true);
       await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: fullPhone,
         timeout: const Duration(seconds: 60),
@@ -193,7 +214,10 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   Future<void> _verifyOtp() async {
-    if (_otpCode.length < 6) { _setError('Enter the 6-digit code'); return; }
+    if (_otpCode.length < 6) {
+      _setError('Enter the 6-digit code');
+      return;
+    }
     _setError(null);
     _setLoading(true);
     try {
@@ -215,15 +239,23 @@ class _LoginScreenState extends State<LoginScreen>
   // ── Email / Password ──────────────────────────────────────────────────────
 
   Future<void> _signInWithEmail() async {
-    final email    = _emailCtrl.text.trim();
+    final email = _emailCtrl.text.trim();
     final password = _passwordCtrl.text;
-    if (email.isEmpty)    { _setError('Enter your email');    return; }
-    if (password.isEmpty) { _setError('Enter your password'); return; }
+    if (email.isEmpty) {
+      _setError('Enter your email');
+      return;
+    }
+    if (password.isEmpty) {
+      _setError('Enter your password');
+      return;
+    }
     _setError(null);
     _setLoading(true);
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email, password: password);
+        email: email,
+        password: password,
+      );
       _goToApp();
     } on FirebaseAuthException catch (e) {
       _setLoading(false);
@@ -236,11 +268,16 @@ class _LoginScreenState extends State<LoginScreen>
 
   String _friendlyError(FirebaseAuthException e) {
     switch (e.code) {
-      case 'user-not-found':   return 'No account found with this email.';
-      case 'wrong-password':   return 'Incorrect password.';
-      case 'invalid-email':    return 'Invalid email address.';
-      case 'too-many-requests': return 'Too many attempts. Try again later.';
-      default: return e.message ?? 'Authentication failed.';
+      case 'user-not-found':
+        return 'No account found with this email.';
+      case 'wrong-password':
+        return 'Incorrect password.';
+      case 'invalid-email':
+        return 'Invalid email address.';
+      case 'too-many-requests':
+        return 'Too many attempts. Try again later.';
+      default:
+        return e.message ?? 'Authentication failed.';
     }
   }
 
@@ -259,7 +296,7 @@ class _LoginScreenState extends State<LoginScreen>
   // ── UI ────────────────────────────────────────────────────────────────────
 
   String get _titleText {
-    if (_step == 'otp')   return 'Verify your\nnumber';
+    if (_step == 'otp') return 'Verify your\nnumber';
     if (_step == 'email') return 'Sign in with\nemail';
     return 'Welcome back,\nDoctor';
   }
@@ -285,38 +322,54 @@ class _LoginScreenState extends State<LoginScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Brand
-                Row(children: [
-                  Container(
-                    width: 48, height: 48,
-                    decoration: BoxDecoration(
-                      color: _primary,
-                      borderRadius: BorderRadius.circular(14),
-                      boxShadow: [
-                        BoxShadow(
-                          color: _primary.withValues(alpha: 0.35),
-                          blurRadius: 16, offset: const Offset(0, 6),
+                Row(
+                  children: [
+                    Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: _primary,
+                        borderRadius: BorderRadius.circular(14),
+                        boxShadow: [
+                          BoxShadow(
+                            color: _primary.withValues(alpha: 0.35),
+                            blurRadius: 16,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.medical_services_rounded,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Soocher',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w900,
+                            color: Color(0xFF0F172A),
+                            letterSpacing: -0.3,
+                          ),
+                        ),
+                        Text(
+                          'FOR DOCTORS',
+                          style: TextStyle(
+                            fontSize: 9,
+                            fontWeight: FontWeight.w700,
+                            color: _primary,
+                            letterSpacing: 3,
+                          ),
                         ),
                       ],
                     ),
-                    child: const Icon(Icons.medical_services_rounded,
-                        color: Colors.white, size: 24),
-                  ),
-                  const SizedBox(width: 12),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Soocher',
-                          style: TextStyle(fontSize: 20,
-                              fontWeight: FontWeight.w900,
-                              color: Color(0xFF0F172A),
-                              letterSpacing: -0.3)),
-                      Text('FOR DOCTORS',
-                          style: TextStyle(fontSize: 9,
-                              fontWeight: FontWeight.w700,
-                              color: _primary, letterSpacing: 3)),
-                    ],
-                  ),
-                ]),
+                  ],
+                ),
 
                 const SizedBox(height: 48),
 
@@ -327,15 +380,25 @@ class _LoginScreenState extends State<LoginScreen>
                     key: ValueKey(_step),
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(_titleText,
-                          style: const TextStyle(fontSize: 32,
-                              fontWeight: FontWeight.w900,
-                              color: Color(0xFF0F172A),
-                              letterSpacing: -0.5, height: 1.15)),
+                      Text(
+                        _titleText,
+                        style: const TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.w900,
+                          color: Color(0xFF0F172A),
+                          letterSpacing: -0.5,
+                          height: 1.15,
+                        ),
+                      ),
                       const SizedBox(height: 8),
-                      Text(_subtitleText,
-                          style: TextStyle(fontSize: 15,
-                              color: Colors.grey.shade600, height: 1.4)),
+                      Text(
+                        _subtitleText,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.grey.shade600,
+                          height: 1.4,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -356,53 +419,56 @@ class _LoginScreenState extends State<LoginScreen>
                           onCountryTap: _showCountryPicker,
                           onSend: _sendOtp,
                           onEmailTap: () => setState(() {
-                            _step  = 'email';
+                            _step = 'email';
                             _error = null;
-                            Future.delayed(const Duration(milliseconds: 150),
-                                () => _emailFocus.requestFocus());
+                            Future.delayed(
+                              const Duration(milliseconds: 150),
+                              () => _emailFocus.requestFocus(),
+                            );
                           }),
                         )
                       : _step == 'otp'
-                          ? _OtpStep(
-                              key: const ValueKey('otp'),
-                              loading: _loading,
-                              error: _error,
-                              onCodeChanged: (code) =>
-                                  setState(() => _otpCode = code),
-                              onVerify: _verifyOtp,
-                              onBack: () => setState(() {
-                                _step    = 'phone';
-                                _error   = null;
-                                _otpCode = '';
-                              }),
-                              onResend: () {
-                                setState(() {
-                                  _otpCode = '';
-                                  _error   = null;
-                                  _step    = 'phone';
-                                });
-                                _sendOtp();
-                              },
-                            )
-                          : _EmailStep(
-                              key: const ValueKey('email'),
-                              emailCtrl: _emailCtrl,
-                              passwordCtrl: _passwordCtrl,
-                              emailFocus: _emailFocus,
-                              passwordFocus: _passwordFocus,
-                              loading: _loading,
-                              error: _error,
-                              passwordVisible: _passwordVisible,
-                              onTogglePassword: () => setState(
-                                  () => _passwordVisible = !_passwordVisible),
-                              onSubmit: _signInWithEmail,
-                              onBack: () => setState(() {
-                                _step = 'phone';
-                                _error = null;
-                                _emailCtrl.clear();
-                                _passwordCtrl.clear();
-                              }),
-                            ),
+                      ? _OtpStep(
+                          key: const ValueKey('otp'),
+                          loading: _loading,
+                          error: _error,
+                          onCodeChanged: (code) =>
+                              setState(() => _otpCode = code),
+                          onVerify: _verifyOtp,
+                          onBack: () => setState(() {
+                            _step = 'phone';
+                            _error = null;
+                            _otpCode = '';
+                          }),
+                          onResend: () {
+                            setState(() {
+                              _otpCode = '';
+                              _error = null;
+                              _step = 'phone';
+                            });
+                            _sendOtp();
+                          },
+                        )
+                      : _EmailStep(
+                          key: const ValueKey('email'),
+                          emailCtrl: _emailCtrl,
+                          passwordCtrl: _passwordCtrl,
+                          emailFocus: _emailFocus,
+                          passwordFocus: _passwordFocus,
+                          loading: _loading,
+                          error: _error,
+                          passwordVisible: _passwordVisible,
+                          onTogglePassword: () => setState(
+                            () => _passwordVisible = !_passwordVisible,
+                          ),
+                          onSubmit: _signInWithEmail,
+                          onBack: () => setState(() {
+                            _step = 'phone';
+                            _error = null;
+                            _emailCtrl.clear();
+                            _passwordCtrl.clear();
+                          }),
+                        ),
                 ),
               ],
             ),
@@ -453,66 +519,96 @@ class _PhoneStep extends StatelessWidget {
               width: 1.5,
             ),
             boxShadow: [
-              BoxShadow(color: Colors.black.withValues(alpha: 0.04),
-                  blurRadius: 8, offset: const Offset(0, 2)),
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.04),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
             ],
           ),
-          child: Row(children: [
-            GestureDetector(
-              onTap: onCountryTap,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
-                decoration: const BoxDecoration(
-                  border: Border(right: BorderSide(
-                      color: Color(0xFFE2E8F0), width: 1.5)),
-                ),
-                child: Row(mainAxisSize: MainAxisSize.min, children: [
-                  Text(country.flag, style: const TextStyle(fontSize: 20)),
-                  const SizedBox(width: 6),
-                  Text(country.dialCode,
-                      style: const TextStyle(fontSize: 15,
+          child: Row(
+            children: [
+              GestureDetector(
+                onTap: onCountryTap,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 16,
+                  ),
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      right: BorderSide(color: Color(0xFFE2E8F0), width: 1.5),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(country.flag, style: const TextStyle(fontSize: 20)),
+                      const SizedBox(width: 6),
+                      Text(
+                        country.dialCode,
+                        style: const TextStyle(
+                          fontSize: 15,
                           fontWeight: FontWeight.w700,
-                          color: Color(0xFF0F172A))),
-                  const SizedBox(width: 4),
-                  const Icon(Icons.keyboard_arrow_down_rounded,
-                      size: 18, color: Color(0xFF94A3B8)),
-                ]),
-              ),
-            ),
-            Expanded(
-              child: TextField(
-                controller: controller,
-                focusNode: focusNode,
-                keyboardType: TextInputType.phone,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                style: const TextStyle(fontSize: 16,
-                    fontWeight: FontWeight.w600, color: Color(0xFF0F172A)),
-                decoration: InputDecoration(
-                  hintText: '99999 99999',
-                  hintStyle: TextStyle(color: Colors.grey.shade400,
-                      fontWeight: FontWeight.w400),
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 14, vertical: 16),
+                          color: Color(0xFF0F172A),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      const Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        size: 18,
+                        color: Color(0xFF94A3B8),
+                      ),
+                    ],
+                  ),
                 ),
-                onSubmitted: (_) => onSend(),
               ),
-            ),
-          ]),
+              Expanded(
+                child: TextField(
+                  controller: controller,
+                  focusNode: focusNode,
+                  keyboardType: TextInputType.phone,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF0F172A),
+                  ),
+                  decoration: InputDecoration(
+                    hintText: '99999 99999',
+                    hintStyle: TextStyle(
+                      color: Colors.grey.shade400,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 16,
+                    ),
+                  ),
+                  onSubmitted: (_) => onSend(),
+                ),
+              ),
+            ],
+          ),
         ),
         if (error != null) _ErrorText(error!),
         const SizedBox(height: 16),
         _PrimaryButton(label: 'Send OTP', loading: loading, onTap: onSend),
         const SizedBox(height: 24),
-        Row(children: [
-          Expanded(child: Divider(color: Colors.grey.shade300)),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Text('or', style: TextStyle(
-                color: Colors.grey.shade500, fontSize: 13)),
-          ),
-          Expanded(child: Divider(color: Colors.grey.shade300)),
-        ]),
+        Row(
+          children: [
+            Expanded(child: Divider(color: Colors.grey.shade300)),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Text(
+                'or',
+                style: TextStyle(color: Colors.grey.shade500, fontSize: 13),
+              ),
+            ),
+            Expanded(child: Divider(color: Colors.grey.shade300)),
+          ],
+        ),
         const SizedBox(height: 20),
         _SecondaryButton(
           icon: Icons.email_rounded,
@@ -524,8 +620,11 @@ class _PhoneStep extends StatelessWidget {
           child: Text(
             'By signing in you agree to our Terms & Privacy Policy',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 11, color: Colors.grey.shade400,
-                height: 1.5),
+            style: TextStyle(
+              fontSize: 11,
+              color: Colors.grey.shade400,
+              height: 1.5,
+            ),
           ),
         ),
       ],
@@ -558,7 +657,7 @@ class _OtpStep extends StatefulWidget {
 }
 
 class _OtpStepState extends State<_OtpStep> {
-  final _ctrl  = TextEditingController();
+  final _ctrl = TextEditingController();
   final _focus = FocusNode();
   Timer? _cursorTimer;
   bool _cursorVisible = true;
@@ -568,8 +667,7 @@ class _OtpStepState extends State<_OtpStep> {
     super.initState();
     _ctrl.addListener(_onTextChange);
     _focus.addListener(_onFocusChange);
-    _cursorTimer = Timer.periodic(
-        const Duration(milliseconds: 530), (_) {
+    _cursorTimer = Timer.periodic(const Duration(milliseconds: 530), (_) {
       if (mounted) setState(() => _cursorVisible = !_cursorVisible);
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -630,7 +728,7 @@ class _OtpStepState extends State<_OtpStep> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: List.generate(6, (i) {
-                    final digit    = i < code.length ? code[i] : '';
+                    final digit = i < code.length ? code[i] : '';
                     final isActive = i == code.length && _focus.hasFocus;
                     return _DigitBox(
                       digit: digit,
@@ -647,9 +745,10 @@ class _OtpStepState extends State<_OtpStep> {
         if (widget.error != null) _ErrorText(widget.error!),
         const SizedBox(height: 20),
         _PrimaryButton(
-            label: 'Verify & Sign In',
-            loading: widget.loading,
-            onTap: widget.onVerify),
+          label: 'Verify & Sign In',
+          loading: widget.loading,
+          onTap: widget.onVerify,
+        ),
         const SizedBox(height: 16),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -659,13 +758,18 @@ class _OtpStepState extends State<_OtpStep> {
               icon: const Icon(Icons.arrow_back_rounded, size: 16),
               label: const Text('Change number'),
               style: TextButton.styleFrom(
-                  foregroundColor: const Color(0xFF64748B)),
+                foregroundColor: const Color(0xFF64748B),
+              ),
             ),
             TextButton(
               onPressed: widget.loading ? null : widget.onResend,
-              child: const Text('Resend OTP',
-                  style: TextStyle(color: Color(0xFF2E6DD4),
-                      fontWeight: FontWeight.w700)),
+              child: const Text(
+                'Resend OTP',
+                style: TextStyle(
+                  color: Color(0xFF2E6DD4),
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
             ),
           ],
         ),
@@ -685,9 +789,9 @@ class _DigitBox extends StatelessWidget {
   });
 
   final String digit;
-  final bool   isActive;
-  final bool   cursorVisible;
-  final bool   hasError;
+  final bool isActive;
+  final bool cursorVisible;
+  final bool hasError;
 
   static const _primary = Color(0xFF2E6DD4);
 
@@ -697,10 +801,10 @@ class _DigitBox extends StatelessWidget {
     final Color borderColor = hasError
         ? const Color(0xFFE11D48)
         : isActive
-            ? _primary
-            : filled
-                ? const Color(0xFFBCD4FF)
-                : const Color(0xFFE2E8F0);
+        ? _primary
+        : filled
+        ? const Color(0xFFBCD4FF)
+        : const Color(0xFFE2E8F0);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 150),
@@ -711,31 +815,43 @@ class _DigitBox extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: borderColor, width: isActive ? 2 : 1.5),
         boxShadow: isActive
-            ? [BoxShadow(color: _primary.withValues(alpha: 0.18),
-                blurRadius: 10, offset: const Offset(0, 3))]
-            : [BoxShadow(color: Colors.black.withValues(alpha: 0.04),
-                blurRadius: 4, offset: const Offset(0, 1))],
+            ? [
+                BoxShadow(
+                  color: _primary.withValues(alpha: 0.18),
+                  blurRadius: 10,
+                  offset: const Offset(0, 3),
+                ),
+              ]
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 4,
+                  offset: const Offset(0, 1),
+                ),
+              ],
       ),
       child: Center(
         child: filled
-            ? Text(digit,
+            ? Text(
+                digit,
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w800,
                   color: hasError
                       ? const Color(0xFFE11D48)
                       : const Color(0xFF0F172A),
-                ))
+                ),
+              )
             : isActive && cursorVisible
-                ? Container(
-                    width: 2,
-                    height: 24,
-                    decoration: BoxDecoration(
-                      color: _primary,
-                      borderRadius: BorderRadius.circular(1),
-                    ),
-                  )
-                : null,
+            ? Container(
+                width: 2,
+                height: 24,
+                decoration: BoxDecoration(
+                  color: _primary,
+                  borderRadius: BorderRadius.circular(1),
+                ),
+              )
+            : null,
       ),
     );
   }
@@ -794,34 +910,48 @@ class _EmailStep extends StatelessWidget {
               width: 1.5,
             ),
             boxShadow: [
-              BoxShadow(color: Colors.black.withValues(alpha: 0.04),
-                  blurRadius: 8, offset: const Offset(0, 2)),
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.04),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
             ],
           ),
           child: TextField(
             controller: passwordCtrl,
             focusNode: passwordFocus,
             obscureText: !passwordVisible,
-            style: const TextStyle(fontSize: 16,
-                fontWeight: FontWeight.w600, color: Color(0xFF0F172A)),
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF0F172A),
+            ),
             decoration: InputDecoration(
               hintText: 'Password',
-              hintStyle: TextStyle(color: Colors.grey.shade400,
-                  fontWeight: FontWeight.w400),
-              prefixIcon: const Icon(Icons.lock_rounded,
-                  color: Color(0xFF2E6DD4), size: 20),
+              hintStyle: TextStyle(
+                color: Colors.grey.shade400,
+                fontWeight: FontWeight.w400,
+              ),
+              prefixIcon: const Icon(
+                Icons.lock_rounded,
+                color: Color(0xFF2E6DD4),
+                size: 20,
+              ),
               suffixIcon: IconButton(
                 icon: Icon(
                   passwordVisible
                       ? Icons.visibility_off_rounded
                       : Icons.visibility_rounded,
-                  color: Colors.grey.shade400, size: 20,
+                  color: Colors.grey.shade400,
+                  size: 20,
                 ),
                 onPressed: onTogglePassword,
               ),
               border: InputBorder.none,
               contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16, vertical: 16),
+                horizontal: 16,
+                vertical: 16,
+              ),
             ),
             onSubmitted: (_) => onSubmit(),
           ),
@@ -853,12 +983,12 @@ class _InputField extends StatelessWidget {
     this.onSubmitted,
   });
 
-  final TextEditingController  controller;
-  final FocusNode              focusNode;
-  final String                 hint;
-  final IconData               icon;
-  final TextInputType?         keyboardType;
-  final ValueChanged<String>?  onSubmitted;
+  final TextEditingController controller;
+  final FocusNode focusNode;
+  final String hint;
+  final IconData icon;
+  final TextInputType? keyboardType;
+  final ValueChanged<String>? onSubmitted;
 
   @override
   Widget build(BuildContext context) {
@@ -868,24 +998,34 @@ class _InputField extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0xFFE2E8F0), width: 1.5),
         boxShadow: [
-          BoxShadow(color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 8, offset: const Offset(0, 2)),
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
         ],
       ),
       child: TextField(
         controller: controller,
         focusNode: focusNode,
         keyboardType: keyboardType,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600,
-            color: Color(0xFF0F172A)),
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          color: Color(0xFF0F172A),
+        ),
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: TextStyle(color: Colors.grey.shade400,
-              fontWeight: FontWeight.w400),
+          hintStyle: TextStyle(
+            color: Colors.grey.shade400,
+            fontWeight: FontWeight.w400,
+          ),
           prefixIcon: Icon(icon, color: const Color(0xFF2E6DD4), size: 20),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16, vertical: 16),
+            horizontal: 16,
+            vertical: 16,
+          ),
         ),
         onSubmitted: onSubmitted,
       ),
@@ -901,18 +1041,23 @@ class _ErrorText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 8),
-      child: Text(text,
-          style: const TextStyle(color: Color(0xFFE11D48), fontSize: 13)),
+      child: Text(
+        text,
+        style: const TextStyle(color: Color(0xFFE11D48), fontSize: 13),
+      ),
     );
   }
 }
 
 class _PrimaryButton extends StatelessWidget {
-  const _PrimaryButton(
-      {required this.label, required this.loading, required this.onTap});
+  const _PrimaryButton({
+    required this.label,
+    required this.loading,
+    required this.onTap,
+  });
 
-  final String    label;
-  final bool      loading;
+  final String label;
+  final bool loading;
   final VoidCallback onTap;
 
   static const _primary = Color(0xFF2E6DD4);
@@ -929,17 +1074,33 @@ class _PrimaryButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(100),
           boxShadow: loading
               ? []
-              : [BoxShadow(color: _primary.withValues(alpha: 0.4),
-                  blurRadius: 16, offset: const Offset(0, 6))],
+              : [
+                  BoxShadow(
+                    color: _primary.withValues(alpha: 0.4),
+                    blurRadius: 16,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
         ),
         child: Center(
           child: loading
-              ? const SizedBox(width: 22, height: 22,
+              ? const SizedBox(
+                  width: 22,
+                  height: 22,
                   child: CircularProgressIndicator(
-                      color: Colors.white, strokeWidth: 2.5))
-              : Text(label,
-                  style: const TextStyle(color: Colors.white, fontSize: 16,
-                      fontWeight: FontWeight.w700, letterSpacing: 0.2)),
+                    color: Colors.white,
+                    strokeWidth: 2.5,
+                  ),
+                )
+              : Text(
+                  label,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.2,
+                  ),
+                ),
         ),
       ),
     );
@@ -947,11 +1108,14 @@ class _PrimaryButton extends StatelessWidget {
 }
 
 class _SecondaryButton extends StatelessWidget {
-  const _SecondaryButton(
-      {required this.icon, required this.label, required this.onTap});
+  const _SecondaryButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
 
   final IconData icon;
-  final String   label;
+  final String label;
   final VoidCallback onTap;
 
   @override
@@ -965,8 +1129,11 @@ class _SecondaryButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(100),
           border: Border.all(color: const Color(0xFFE2E8F0), width: 1.5),
           boxShadow: [
-            BoxShadow(color: Colors.black.withValues(alpha: 0.04),
-                blurRadius: 8, offset: const Offset(0, 2)),
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
           ],
         ),
         child: Row(
@@ -974,9 +1141,14 @@ class _SecondaryButton extends StatelessWidget {
           children: [
             Icon(icon, color: const Color(0xFF2E6DD4), size: 20),
             const SizedBox(width: 10),
-            Text(label,
-                style: const TextStyle(fontSize: 15,
-                    fontWeight: FontWeight.w600, color: Color(0xFF1E293B))),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF1E293B),
+              ),
+            ),
           ],
         ),
       ),
