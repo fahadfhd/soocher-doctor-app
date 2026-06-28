@@ -186,7 +186,7 @@ class _LoginScreenState extends State<LoginScreen>
     _setLoading(true);
     final fullPhone = '${_selectedCountry.dialCode}$number';
     try {
-      // await FirebaseAuth.instance.setSettings(forceRecaptchaFlow: true);
+      // await FirebaseAuth.instance.setSettings(forceRecaptchaFlow: true); /sssss
       await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: fullPhone,
         timeout: const Duration(seconds: 60),
